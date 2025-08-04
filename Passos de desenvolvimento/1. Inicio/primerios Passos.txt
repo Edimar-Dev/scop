@@ -1,0 +1,86 @@
+Passos de desenvolvimento do SCOP
+
+O Objetivo deste documneto é descrever os passos iniciais para o desenvolvimento do SCOP. Aqui irei compartilha minhas duvidas, moficiações e desenvolvimento deste sistema. 
+
+Utilzei uma linguagem mais formal para maior clareza, para que todos possam entender o que foi feito e como foi feito.
+
+Sobre o sistema SCOP:
+
+Sistema de Controle e Organização de Planilhas, é uma aplicação web desenvolvida com Laravel e Filament, criada para substituir o controle manual feito por planilhas no gerenciamento de servidores alocados em diferentes unidades administrativas.
+
+O sistema tem como objetivo:
+
+- Facilitar o controle de perfis por unidade com limites recomendados por cargo/perfil;
+
+- Garantir que cada colaborador esteja alocado em apenas uma unidade e com apenas um perfil;
+
+- Alertar automaticamente quando o número de servidores ultrapassar os limites definidos para cada perfil;
+
+- Permitir a transferência de servidores entre unidades, com possibilidade de atualização de dados (como nome, e-mail ou perfil);
+
+- Registrar e permitir a edição, exclusão e exportação de dados para fins administrativos;
+
+- Disponibilizar uma tela inicial com visão geral do sistema, além de subvisões por unidade.
+
+Primeiros passos: 
+
+Initial commit: 
+
+Criação inicial do projeto Laravel com o painel administrativo do Filament. Estrutura básica configurada, com painel acessível via "/".
+
+Commit feat(unidade): adiciona resource, model, migration, policy, factory e seeder.
+
+- Criação da model Unidade, migration com campos nome e sigla;
+
+- Registro do recurso no Filament (UnidadeResource);
+
+- Adição de factory e seeder para popular dados de teste;
+
+- Definição de policy para controle de acesso.
+
+Commit feat(perfil): adiciona resource, model, migration, policy, factory e seeder.
+
+- Criação da model Perfil, migration com campos nome e descrição;
+
+- Registro do recurso no Filament (PerfilResource);
+
+- Adição de factory e seeder para popular dados de teste;
+
+- Definição de policy para controle de acesso.
+
+Commit feat(perfil-unidade): adicionar model, resource, migration, policy, factory e seeder para PerfilUnidade.
+
+Importante alteração na modelagem do sistema:
+
+Inicialmente, o campo limite_recomendado (quantidade ideal de servidores por perfil) seria armazenado diretamente na tabela perfis. Porém, pensei melhor e mudei, pois poderia ocorrerr um cenário onde o limite recomendado poderia variar por unidade. Assim, criei uma nova tabela PerfilUnidade para armazenar o limite recomendado por perfil e unidade.
+
+Criada a tabela intermediária perfil_unidade com campos:
+
+- perfil_id
+
+- unidade_id
+
+- limite_recomendado
+
+O PerfilUnidadeResource foi implementado no painel Filament;
+
+No formulário, foi adicionada a visualização da sigla da unidade junto ao nome para facilitar o uso;
+
+Também foram adicionados os arquivos de policy, seeder e factory relacionados.
+
+Primeiro problema encontrado:
+
+"SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1-1' for key 'perfil_unidades.perfil_unidades_unidade_id_perfil_id_unique' (Connection: mysql, SQL: insert into `perfil_unidades` (`unidade_id`, `perfil_id`, `limite_recomendado`, `updated_at`, `created_at`) values (1, 1, 2, 2025-08-04 17:45:11, 2025-08-04 17:45:11))"
+
+Ao tentar criar um novo PerfilUnidade (com o mesmo nome de um já criado), o sistema não permitia a criação de registros duplicados para a mesma combinação de perfil e unidade. Tentar usar uma validação:
+
+        ->rules([
+            fn (Get $get, ?PerfilUnidade $record) =>
+                Rule::unique('perfil_unidades')
+                    ->where(fn ($query) => $query
+                        ->where('unidade_id', $get('unidade_id'))
+                        ->where('perfil_id', $get('perfil_id')))
+                    ->ignore($record?->id),
+        ]), 
+
+Porém, não resolveu o problema, estou olhando a documentação do Filament para entender melhor como funcionam as validações.

@@ -9,4 +9,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreatePerfilUnidade extends CreateRecord
 {
     protected static string $resource = PerfilUnidadeResource::class;
+
+        protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }
