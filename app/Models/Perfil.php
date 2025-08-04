@@ -19,4 +19,9 @@ class Perfil extends Model
         return $this->hasMany(Servidor::class); 
     }
 
+    public function perfilUnidades()
+    {
+        return $this->hasMany(PerfilUnidade::class);
+    }
+
 }
