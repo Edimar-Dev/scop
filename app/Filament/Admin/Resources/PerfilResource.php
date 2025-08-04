@@ -26,7 +26,11 @@ class PerfilResource extends Resource
                 TextInput::make('nome')
                     ->label('Nome do Perfil')
                     ->required()
-                    ->maxLength(100),
+                    ->maxLength(100)
+                    ->unique(ignoreRecord: true)
+                    ->validationMessages([
+                        'unique' => 'Este perfil já foi cadastrado.',
+                    ]),
             ]);
     }
 

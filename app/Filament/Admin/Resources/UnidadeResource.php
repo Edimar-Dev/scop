@@ -28,12 +28,20 @@ class UnidadeResource extends Resource
                 TextInput::make('nome')
                     ->label('Nome da Unidade')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->unique(ignoreRecord: true)
+                    ->validationMessages([
+                     'unique' => 'Esta unidade já foi cadastrada.',
+                    ]),
 
                 TextInput::make('sigla')
                     ->label('Sigla')
                     ->required()
-                    ->maxLength(10),
+                    ->maxLength(10)
+                    ->unique(ignoreRecord: true)
+                    ->validationMessages([
+                     'unique' => 'Esta sigla já foi cadastrada.',
+                    ]),
             ]);
     }
 
