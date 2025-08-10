@@ -14,7 +14,7 @@ class PerfilResource extends Resource
 {
     protected static ?string $model = Perfil::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $navigationIcon = 'heroicon-o-identification';
     protected static ?string $navigationLabel = 'Perfis';
     protected static ?string $pluralModelLabel = 'Perfis';
     protected static ?string $modelLabel = 'Perfil';
