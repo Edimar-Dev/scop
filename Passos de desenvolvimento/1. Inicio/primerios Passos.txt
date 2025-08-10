@@ -83,4 +83,17 @@ Ao tentar criar um novo PerfilUnidade (com o mesmo nome de um já criado), o sis
                     ->ignore($record?->id),
         ]), 
 
+Durante o desenvolvimento, me deparei com um erro de integridade de chave duplicada (SQLSTATE[23000]: Integrity constraint violation: 1062) ao tentar criar registros que já existiam no sistema.
+
 Porém, não resolveu o problema, estou olhando a documentação do Filament para entender melhor como funcionam as validações.
+
+Depois de pesquisar na documentação oficial do Filament em https://filamentphp.com/docs/3.x/forms/validation, encontrei a solução adequada.
+Inicialmente, a documentação não apresentava de forma clara como lidar com validações de chaves compostas, mas após uma análise mais cuidadosa, identifiquei que é possível utilizar o método unique() em conjunto com parâmetros específicos para resolver essa situação.
+A implementação consiste em aplicar Field::make('campo')->unique(ignoreRecord: true) e personalizar a regra através do parâmetro modifyRuleUsing. Esta abordagem permite:
+
+Validar a unicidade dos dados antes da tentativa de inserção no banco
+Apresentar mensagens personalizadas e amigáveis ao usuário
+Ignorar o registro atual durante operações de edição, evitando falsos positivos
+Substituir os erros técnicos de SQL por feedbacks compreensíveis
+
+No contexto específico do sistema de limites por perfil e unidade, esta solução elimina o erro de constraint violation e oferece uma experiência mais profissional ao usuário final, informando claramente quando uma combinação já foi cadastrada no sistema.

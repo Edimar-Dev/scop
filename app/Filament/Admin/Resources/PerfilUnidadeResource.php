@@ -36,7 +36,16 @@ class PerfilUnidadeResource extends Resource
                 Select::make('perfil_id')
                     ->label('Perfil')
                     ->relationship('perfil', 'nome')
-                    ->required(),
+                    ->required()
+                    ->unique(
+                        table: 'perfil_unidades',
+                        column: 'perfil_id',
+                        modifyRuleUsing: fn ($rule, $get) => $rule->where('unidade_id', $get('unidade_id')),
+                        ignoreRecord: true
+                    )
+                    ->validationMessages([
+                        'unique' => 'Já existe um limite definido para esta unidade e perfil.',
+                    ]),
 
                 TextInput::make('limite_recomendado')
                     ->label('Limite Recomendado')
