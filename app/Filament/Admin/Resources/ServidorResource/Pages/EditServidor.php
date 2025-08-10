@@ -16,4 +16,9 @@ class EditServidor extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return ServidorResource::getUrl('index');
+    }
 }

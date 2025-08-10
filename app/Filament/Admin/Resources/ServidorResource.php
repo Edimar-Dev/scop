@@ -6,6 +6,7 @@ use App\Filament\Admin\Resources\ServidorResource\Pages;
 use App\Models\Servidor;
 use App\Models\Unidade;
 use App\Models\Perfil;
+use App\Rules\ValidCpf;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Components\Select;
@@ -40,7 +41,7 @@ class ServidorResource extends Resource
                     ->mask('999.999.999-99')
                     ->placeholder('000.000.000-00')
                     ->unique(ignoreRecord: true)
-                    ->rule('cpf') // Se você tiver validação de CPF customizada
+                    ->rules([new ValidCpf()])
                     ->maxLength(14),
 
                 TextInput::make('email')

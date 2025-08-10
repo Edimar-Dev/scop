@@ -9,4 +9,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateServidor extends CreateRecord
 {
     protected static string $resource = ServidorResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return ServidorResource::getUrl('index');
+    }
 }
