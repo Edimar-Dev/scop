@@ -41,6 +41,9 @@ class ServidorResource extends Resource
                     ->mask('999.999.999-99')
                     ->placeholder('000.000.000-00')
                     ->unique(ignoreRecord: true)
+                    ->validationMessages([
+                        'unique' => 'O CPF informado já está sendo usado em outro cadastro.',
+                    ])
                     ->rules([new ValidCpf()])
                     ->maxLength(14),
 
@@ -49,6 +52,9 @@ class ServidorResource extends Resource
                     ->email()
                     ->required()
                     ->unique(ignoreRecord: true)
+                    ->validationMessages([
+                        'unique' => 'O e-mail informado já está sendo usado em outro cadastro.',
+                    ])
                     ->maxLength(100),
 
                 TextInput::make('matricula')

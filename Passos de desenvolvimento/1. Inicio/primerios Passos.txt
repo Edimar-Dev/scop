@@ -97,3 +97,11 @@ Ignorar o registro atual durante operações de edição, evitando falsos positi
 Substituir os erros técnicos de SQL por feedbacks compreensíveis
 
 No contexto específico do sistema de limites por perfil e unidade, esta solução elimina o erro de constraint violation e oferece uma experiência mais profissional ao usuário final, informando claramente quando uma combinação já foi cadastrada no sistema.
+
+Implementação da Tabela Servidores:
+
+Cadastrei a tela de Servidores, que será uma tabela muito importante no sistema, pois servirá como referência para diversas chaves estrangeiras (FKs). Já percebi que precisaremos ter bastante cuidado com as validações, especialmente para evitar inconsistências.
+Após criar a tabela, identifiquei a necessidade de validar CPF e e-mail, garantindo que esses campos não sejam duplicados no sistema.
+
+Notei também que esqueci de informar o tipo de servidor, efetivo, terceirizado ou etc...
+Terei que implementar.
